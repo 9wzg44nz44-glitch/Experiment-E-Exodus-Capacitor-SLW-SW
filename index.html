@@ -487,7 +487,7 @@ svg.toy-plot, svg.toy-cartoon {
       <div class="toy-cartoon-card">
         <h4>Lab geometry sketch</h4>
         <svg class="toy-cartoon" id="toyCartoon" viewBox="0 0 420 280" role="img" aria-labelledby="toyCartoonTitle">
-          <title id="toyCartoonTitle">Capacitor to detector distance sketch that updates with the range slider</title>
+          <title id="toyCartoonTitle">Capacitor to Pelican case with both A and B detectors; distance updates with the range slider</title>
         </svg>
       </div>
     </div>
@@ -939,47 +939,60 @@ SW sketch (hypothesis):
     toyCartoon.appendChild(el('rect', { width: W, height: H, fill: '#0a0810' }));
 
     // chamber
-    toyCartoon.appendChild(el('rect', { x: 24, y: 70, width: 110, height: 140, rx: 10, fill: '#16101c', stroke: '#d4894a', 'stroke-width': 2 }));
-    toyCartoon.appendChild(el('text', { x: 36, y: 92, fill: '#d4894a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12, 'font-weight': 600 }, 'Capacitor'));
-    toyCartoon.appendChild(el('rect', { x: 48, y: 110, width: 60, height: 40, rx: 3, fill: '#2a1c18', stroke: '#f0b07a', 'stroke-width': 1.5 }));
-    toyCartoon.appendChild(el('text', { x: 42, y: 195, fill: '#b7a89a', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, modeNull ? 'supply OFF' : 'mod ON'));
+    toyCartoon.appendChild(el('rect', { x: 20, y: 70, width: 100, height: 140, rx: 10, fill: '#16101c', stroke: '#d4894a', 'stroke-width': 2 }));
+    toyCartoon.appendChild(el('text', { x: 32, y: 92, fill: '#d4894a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12, 'font-weight': 600 }, 'Capacitor'));
+    toyCartoon.appendChild(el('rect', { x: 40, y: 110, width: 56, height: 40, rx: 3, fill: '#2a1c18', stroke: '#f0b07a', 'stroke-width': 1.5 }));
+    toyCartoon.appendChild(el('text', { x: 34, y: 195, fill: '#b7a89a', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, modeNull ? 'supply OFF' : 'mod ON'));
 
-    // detector box — position scales with range
+    // pelican position scales with range (farther → farther right)
     const t = (r - 0.5) / (20 - 0.5);
-    const detX = 170 + t * 140; // farther range → farther box
-    toyCartoon.appendChild(el('rect', { x: detX, y: 95, width: 100, height: 90, rx: 10, fill: '#152018', stroke: '#7dba8a', 'stroke-width': 2 }));
-    toyCartoon.appendChild(el('text', { x: detX + 12, y: 118, fill: '#7dba8a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12, 'font-weight': 600 }, 'Detector'));
-    toyCartoon.appendChild(el('circle', { cx: detX + 50, cy: 148, r: 18, fill: '#120e18', stroke: band.label === 'A' ? '#d4894a' : '#9b7bdb', 'stroke-width': 2 }));
-    toyCartoon.appendChild(el('text', { x: detX + 50, y: 152, fill: band.label === 'A' ? '#d4894a' : '#9b7bdb', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 13, 'font-weight': 600 }, band.label));
+    const pelX = 155 + t * 95;
+    const pelW = 210;
+    // Pelican case holding BOTH A and B
+    toyCartoon.appendChild(el('rect', { x: pelX, y: 78, width: pelW, height: 130, rx: 12, fill: '#152018', stroke: '#7dba8a', 'stroke-width': 2.5 }));
+    toyCartoon.appendChild(el('text', { x: pelX + 12, y: 100, fill: '#7dba8a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12, 'font-weight': 600 }, 'Pelican case'));
+    toyCartoon.appendChild(el('text', { x: pelX + 12, y: 116, fill: '#a8c4b0', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, 'A + B detectors'));
 
-    // distance arrow
-    const x1 = 140, x2 = detX - 6, y = 140;
+    // Circle A
+    const ax = pelX + 58, ay = 160;
+    toyCartoon.appendChild(el('circle', { cx: ax, cy: ay, r: 22, fill: '#120e18', stroke: '#d4894a', 'stroke-width': 2 }));
+    toyCartoon.appendChild(el('text', { x: ax, y: ay + 5, fill: '#d4894a', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 16, 'font-weight': 600 }, 'A'));
+    toyCartoon.appendChild(el('text', { x: ax, y: ay + 36, fill: '#f0b07a', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 9 }, '1.3 GHz'));
+
+    // Circle B
+    const bx = pelX + 148, by = 160;
+    toyCartoon.appendChild(el('circle', { cx: bx, cy: by, r: 22, fill: '#120e18', stroke: '#9b7bdb', 'stroke-width': 2 }));
+    toyCartoon.appendChild(el('text', { x: bx, y: by + 5, fill: '#9b7bdb', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 16, 'font-weight': 600 }, 'B'));
+    toyCartoon.appendChild(el('text', { x: bx, y: by + 36, fill: '#c4b0e8', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 9 }, '433 MHz'));
+
+    // distance arrow from chamber to pelican
+    const x1 = 126, x2 = pelX - 6, y = 140;
     toyCartoon.appendChild(el('line', { x1: x1, y1: y, x2: x2, y2: y, stroke: '#b7a89a', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }));
     toyCartoon.appendChild(el('text', { x: (x1 + x2) / 2, y: y - 10, fill: '#f0b07a', 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 12 }, r.toFixed(1) + ' m'));
 
     // wave glyphs when modulated
     if (!modeNull) {
       for (let i = 0; i < 3; i++) {
-        const wx = 145 + i * 18;
+        const wx = 128 + i * 14;
         toyCartoon.appendChild(el('path', {
-          d: 'M' + wx + ' 118 Q' + (wx + 6) + ' 128 ' + wx + ' 138 Q' + (wx - 6) + ' 148 ' + wx + ' 158',
+          d: 'M' + wx + ' 118 Q' + (wx + 5) + ' 128 ' + wx + ' 138 Q' + (wx - 5) + ' 148 ' + wx + ' 158',
           fill: 'none', stroke: '#d4894a', 'stroke-width': 1.4, opacity: String(0.9 - i * 0.2)
         }));
       }
-      toyCartoon.appendChild(el('text', { x: 150, y: 175, fill: '#d4894a', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, f.toFixed(2) + ' GHz'));
+      toyCartoon.appendChild(el('text', { x: 128, y: 175, fill: '#d4894a', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, f.toFixed(2) + ' GHz'));
     } else {
-      toyCartoon.appendChild(el('text', { x: 148, y: 155, fill: '#6a6470', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, 'no TX tone'));
+      toyCartoon.appendChild(el('text', { x: 128, y: 155, fill: '#6a6470', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 }, 'no TX tone'));
     }
 
     toyCartoon.appendChild(el('text', {
-      x: 24, y: 36, fill: '#b7a89a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12
+      x: 20, y: 36, fill: '#b7a89a', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 12
     }, 'TEM rejection slider: ' + rej.toFixed(0) + ' dB (antenna class reminder)'));
     toyCartoon.appendChild(el('text', {
-      x: 24, y: 54, fill: '#8a8078', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 11
-    }, 'Closest lock: ' + band.name));
+      x: 20, y: 54, fill: '#8a8078', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 11
+    }, 'Closest lock for f_mod: ' + band.name));
     toyCartoon.appendChild(el('text', {
-      x: 24, y: 258, fill: '#8a8078', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 11, 'font-style': 'italic'
-    }, 'Not to scale · not a measurement'));
+      x: 20, y: 258, fill: '#8a8078', 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 11, 'font-style': 'italic'
+    }, 'Not to scale · not a measurement · both detectors travel together'));
   }
 
   function update() {
