@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experiment E — Exodus capacitors vs Hively-style SLW/SW detectors</title>
+<meta name="description" content="Independent educational page: proposed Titusville lab test of Exodus asymmetric thrust capacitors against Hively-style SLW/SW detection concepts. Not built yet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0c12;
+  --bg2: #16121c;
+  --panel: #1c1624;
+  --ink: #f3ebe0;
+  --muted: #b7a89a;
+  --copper: #d4894a;
+  --copper-dim: #a86a35;
+  --violet: #9b7bdb;
+  --violet-dim: #6e55a8;
+  --cream: #f7efe4;
+  --banner: #efe4d4;
+  --banner-ink: #1a1210;
+  --ok: #7dba8a;
+  --warn: #e0b35a;
+  --line: rgba(212,137,74,.28);
+  --card: #221a2c;
+  --shadow: 0 12px 40px rgba(0,0,0,.45);
+  --radius: 14px;
+  --max: 920px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(155,123,219,.14), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(212,137,74,.10), transparent 50%),
+    var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 17px;
+}
+a { color: var(--copper); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: #f0b07a; }
+.sticky {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(12px);
+  background: rgba(14,12,18,.88);
+  border-bottom: 1px solid var(--line);
+}
+.sticky-inner {
+  max-width: calc(var(--max) + 80px);
+  margin: 0 auto;
+  padding: .7rem 1.25rem;
+  display: flex; flex-wrap: wrap; gap: .6rem 1.2rem;
+  align-items: center; justify-content: space-between;
+}
+.brand {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .92rem;
+  letter-spacing: .02em;
+  color: var(--cream);
+}
+.brand span { color: var(--copper); }
+.badge {
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .28rem .65rem;
+  border-radius: 999px;
+  background: linear-gradient(120deg, rgba(212,137,74,.22), rgba(155,123,219,.22));
+  border: 1px solid var(--line);
+  color: var(--cream);
+}
+.nav { display: flex; flex-wrap: wrap; gap: .55rem .9rem; font-size: .82rem; }
+.nav a { color: var(--muted); text-decoration: none; }
+.nav a:hover { color: var(--copper); }
+main { max-width: var(--max); margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+.hero {
+  margin: 1.2rem 0 2rem;
+  padding: 1.6rem 1.5rem 1.4rem;
+  background: linear-gradient(155deg, #241a2e 0%, #17121f 55%, #1a1410 100%);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow);
+}
+.hero h1 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(1.55rem, 3.4vw, 2.15rem);
+  line-height: 1.25;
+  margin: 0 0 .75rem;
+  color: var(--cream);
+}
+.lede { color: var(--muted); margin: 0 0 1rem; max-width: 62ch; }
+.tags { display: flex; flex-wrap: wrap; gap: .45rem; }
+.tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .72rem;
+  padding: .22rem .55rem;
+  border-radius: 6px;
+  background: var(--panel);
+  border: 1px solid rgba(155,123,219,.35);
+  color: #d4c4f0;
+}
+.banner {
+  background: var(--banner);
+  color: var(--banner-ink);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  margin: 1.25rem 0;
+  border: 1px solid #d9c9b0;
+  box-shadow: inset 0 1px 0 #fff8ee;
+}
+.banner strong { color: #3a1f0e; }
+.banner.warn { background: #f3e2b8; border-color: #e0c878; }
+.section {
+  margin: 2.4rem 0;
+  padding: 1.35rem 1.25rem 1.45rem;
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+}
+.section h2 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.45rem;
+  margin: 0 0 .85rem;
+  color: var(--cream);
+  border-bottom: 2px solid var(--copper-dim);
+  padding-bottom: .45rem;
+}
+.section h3 {
+  font-size: 1.05rem;
+  margin: 1.25rem 0 .5rem;
+  color: var(--violet);
+  font-weight: 600;
+}
+.section p, .section li { color: #e8ddd0; }
+.section ul, .section ol { padding-left: 1.2rem; }
+.section li { margin: .35rem 0; }
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .two-col { grid-template-columns: 1fr; }
+  .nav { display: none; }
+}
+.card {
+  background: var(--card);
+  border: 1px solid rgba(212,137,74,.2);
+  border-radius: 12px;
+  padding: 1rem 1.05rem;
+}
+.card h4 {
+  margin: 0 0 .4rem;
+  font-size: .95rem;
+  color: var(--copper);
+  font-family: "IBM Plex Mono", monospace;
+}
+.card.violet { border-color: rgba(155,123,219,.35); }
+.card.violet h4 { color: var(--violet); }
+.math {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .86rem;
+  background: #0a0810;
+  border: 1px solid rgba(155,123,219,.3);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  color: #e8dff5;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.math .note { color: #a89888; font-family: "IBM Plex Sans", sans-serif; font-size: .82rem; display: block; margin-top: .6rem; }
+.illus {
+  font-size: .8rem;
+  color: var(--warn);
+  font-style: italic;
+  margin: .4rem 0 .8rem;
+}
+.svg-wrap {
+  background: #100e16;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: .75rem;
+  margin: 1rem 0 1.25rem;
+  overflow-x: auto;
+}
+svg.lab { width: 100%; min-width: 560px; height: auto; display: block; }
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .85rem;
+  margin-top: 1rem;
+}
+.control {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 10px;
+  padding: .75rem .85rem;
+}
+.control label {
+  display: block;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  margin-bottom: .35rem;
+}
+.control output {
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--copper);
+  font-size: .9rem;
+}
+input[type=range] { width: 100%; accent-color: var(--violet); }
+select {
+  width: 100%;
+  background: #0e0c14;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: .4rem .5rem;
+}
+.toy-out {
+  margin-top: .9rem;
+  padding: .85rem 1rem;
+  background: #120f18;
+  border-left: 3px solid var(--violet);
+  border-radius: 0 10px 10px 0;
+  font-size: .92rem;
+  color: var(--muted);
+}
+.library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .9rem;
+}
+.lib-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  min-height: 140px;
+}
+.lib-card .kind {
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--violet);
+  font-weight: 600;
+}
+.lib-card h4 { margin: 0; font-size: .95rem; color: var(--cream); }
+.lib-card p { margin: 0; font-size: .84rem; color: var(--muted); flex: 1; }
+.lib-card a { font-size: .84rem; font-weight: 500; }
+.checklist li { margin: .5rem 0; }
+.footer {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .85rem;
+}
+.mono { font-family: "IBM Plex Mono", monospace; font-size: .9em; }
+.pill {
+  display: inline-block;
+  padding: .1rem .45rem;
+  border-radius: 5px;
+  background: rgba(212,137,74,.15);
+  color: var(--copper);
+  font-size: .82em;
+}
+</style>
+</head>
+<body>
+<header class="sticky">
+  <div class="sticky-inner">
+    <div class="brand"><span>Experiment E</span> · Independent · Not built yet</div>
+    <div class="badge">Titusville proposal</div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#hypothesis">Hypothesis</a>
+      <a href="#modes">Modes</a>
+      <a href="#detectors">A/B</a>
+      <a href="#math-hively">Hively</a>
+      <a href="#math-buhler">Buhler</a>
+      <a href="#match">Match</a>
+      <a href="#library">Library</a>
+      <a href="#controls">Controls</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Experiment E — Exodus asymmetric-thrust capacitors vs Hively-style SLW/SW detectors</h1>
+    <p class="lede">
+      A warm, skeptical sketch of a <strong>proposed</strong> side-by-side test in the
+      <strong>Exodus Propulsion Technologies</strong> lab, <strong>Titusville, FL</strong>
+      (<a href="https://ept.space/">ept.space</a>). Dan’s detector “Pelican-case equivalent”
+      would sit nearby. Nothing on Dan’s detection side is built or verified yet.
+      Published work by others (Hively, Monstein–Wesley, and plasma-tube detection literature)
+      shows that <em>variants</em> of related schemes have worked for others — that is encouragement, not a result.
+    </p>
+    <div class="tags">
+      <span class="tag">null mode</span>
+      <span class="tag">~1.3 GHz</span>
+      <span class="tag">433 MHz</span>
+      <span class="tag">SLW / SW</span>
+      <span class="tag">TinySA Ultra</span>
+      <span class="tag">independent</span>
+    </div>
+  </section>
+
+  <div class="banner">
+    <strong>Independence note.</strong> This page is completely standalone. It is not part of any
+    SLW Hub, Experiment A/B/C navigation, or third-party Glitch portfolio. No hub links appear here.
+    Tone: curious guest with a spectrum analyzer and unfinished antennas — not a co-author of Exodus claims,
+    and not a claimant that longitudinal/scalar detectors already work in Dan’s hands.
+  </div>
+
+  <div class="svg-wrap" aria-label="Lab sketch">
+    <svg class="lab" viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img">
+      <title>Vacuum chamber, Faraday cage, capacitor, Pelican detector case, rays to A and B</title>
+      <rect width="880" height="320" fill="#0a0810"/>
+      <text x="24" y="28" fill="#b7a89a" font-family="IBM Plex Mono, monospace" font-size="12">Exodus lab sketch · Titusville · illustrative only</text>
+      <!-- Chamber -->
+      <rect x="60" y="60" width="280" height="200" rx="18" fill="#16101c" stroke="#d4894a" stroke-width="2"/>
+      <text x="78" y="84" fill="#d4894a" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600">Vacuum chamber</text>
+      <!-- Faraday cage -->
+      <rect x="100" y="100" width="200" height="130" rx="8" fill="none" stroke="#9b7bdb" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="112" y="118" fill="#9b7bdb" font-family="IBM Plex Mono, monospace" font-size="11">Faraday cage</text>
+      <!-- Capacitor -->
+      <rect x="155" y="145" width="90" height="55" rx="4" fill="#2a1c18" stroke="#f0b07a" stroke-width="2"/>
+      <line x1="175" y1="145" x2="175" y2="200" stroke="#f0b07a" stroke-width="2"/>
+      <line x1="225" y1="145" x2="225" y2="200" stroke="#f0b07a" stroke-width="2"/>
+      <text x="162" y="230" fill="#f3ebe0" font-family="IBM Plex Sans, sans-serif" font-size="12">Thrust capacitor</text>
+      <!-- Pelican -->
+      <rect x="400" y="170" width="130" height="70" rx="8" fill="#1c2430" stroke="#7dba8a" stroke-width="2"/>
+      <text x="412" y="200" fill="#7dba8a" font-family="IBM Plex Sans, sans-serif" font-size="12">Pelican-case</text>
+      <text x="412" y="218" fill="#a8c4b0" font-family="IBM Plex Mono, monospace" font-size="11">equiv. (planned)</text>
+      <!-- Detector A -->
+      <circle cx="620" cy="95" r="28" fill="#1a1424" stroke="#d4894a" stroke-width="2"/>
+      <text x="606" y="90" fill="#d4894a" font-family="IBM Plex Mono, monospace" font-size="11">A</text>
+      <text x="592" y="108" fill="#b7a89a" font-family="IBM Plex Mono, monospace" font-size="10">1.3 GHz</text>
+      <text x="560" y="145" fill="#b7a89a" font-family="IBM Plex Sans, sans-serif" font-size="11">Bifilar / Faraday lineage</text>
+      <!-- Detector B -->
+      <circle cx="720" cy="230" r="32" fill="#1a1424" stroke="#9b7bdb" stroke-width="2"/>
+      <text x="706" y="226" fill="#9b7bdb" font-family="IBM Plex Mono, monospace" font-size="11">B</text>
+      <text x="696" y="244" fill="#b7a89a" font-family="IBM Plex Mono, monospace" font-size="10">433 MHz</text>
+      <text x="660" y="280" fill="#b7a89a" font-family="IBM Plex Sans, sans-serif" font-size="11">Sphere + polarizer rods</text>
+      <!-- Rays -->
+      <path d="M340 140 C420 100, 500 95, 592 95" fill="none" stroke="#d4894a" stroke-width="1.5" stroke-dasharray="4 3" opacity=".85"/>
+      <path d="M340 200 C450 220, 580 230, 688 230" fill="none" stroke="#9b7bdb" stroke-width="1.5" stroke-dasharray="4 3" opacity=".85"/>
+      <text x="430" y="88" fill="#d4894a" font-family="IBM Plex Mono, monospace" font-size="10">? SLW/SW</text>
+      <text x="480" y="250" fill="#9b7bdb" font-family="IBM Plex Mono, monospace" font-size="10">? longitudinal</text>
+    </svg>
+  </div>
+
+  <!-- 1 Hypothesis -->
+  <section class="section" id="hypothesis">
+    <h2>1. Hypothesis</h2>
+    <p>
+      Do Exodus asymmetric electrostatic “thrust capacitors” radiate detectable
+      <strong>scalar longitudinal waves (SLW)</strong> and/or <strong>scalar waves (SW)</strong>
+      in the sense of Hively’s Maxwell–Cartesian Electrodynamics (MCE) framing,
+      or leave a static / slowly varying <strong>vector-potential</strong> signature —
+      while classical TEM is rejected by TEM-null antenna designs?
+    </p>
+    <p>
+      The capacitor may sit in a <strong>vacuum chamber</strong> with a <strong>Faraday cage</strong>
+      around it, hypothetically transmitting (or not) in both static and modulated modes
+      near <span class="pill">1.3 GHz</span> and <span class="pill">433 MHz</span>.
+      Exodus public materials emphasize electrostatic pressure / third-order QED narratives for thrust;
+      this Experiment E asks a <em>different</em>, adjacent question: is there an RF / potential channel
+      a Hively-style observer might notice?
+    </p>
+    <div class="banner">
+      <strong>Skeptical baseline.</strong> Null results are scientifically useful. A positive TEM-null excess
+      would still need brutal controls before anyone whispers “longitudinal.” Dan has not yet built
+      Experiment A (≈1.3 GHz bifilar/Faraday) or Experiment B (433 MHz sphere) detectors.
+    </div>
+  </section>
+
+  <!-- 2 Modes -->
+  <section class="section" id="modes">
+    <h2>2. Two capacitor modes</h2>
+    <div class="two-col">
+      <div class="card">
+        <h4>Static null mode</h4>
+        <p>
+          Capacitor charged; <strong>power supply removed</strong>; Exodus-style claims sometimes
+          describe thrust that persists without continuous drive. For RF purposes, expect
+          <strong>no intentional RF drive</strong>. Any SLW/SW or leftover A-potential signature
+          in this mode would be surprising and interesting.
+        </p>
+        <p>
+          Still structure observation windows around the A/B detector bands
+          (<span class="mono">~1.296 GHz</span>, <span class="mono">433.59 MHz</span>)
+          in case of broadband or slowly drifting excess.
+        </p>
+      </div>
+      <div class="card violet">
+        <h4>Modulated mode</h4>
+        <p>
+          Deliberately modulate the capacitor (or bias) near
+          <strong>1.296 GHz</strong> and <strong>433.59 MHz</strong> so Dan’s planned bifilar (A)
+          and sphere (B) detectors are on-frequency. This creates a forced opportunity for
+          narrowband detection if any longitudinal/scalar channel couples to the drive.
+        </p>
+        <p>
+          Modulation also lets you hunt sidebands and harmonics on a wider SA sweep —
+          without pretending the antennas are calibrated longitudinal sensors yet.
+        </p>
+      </div>
+    </div>
+
+    <h3>Illustrative toy (not calibrated)</h3>
+    <p class="illus">Sliders are pedagogical only — they do not model Exodus hardware or Hively detectors.</p>
+    <div class="controls">
+      <div class="control">
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="null">Static null (supply off)</option>
+          <option value="mod">Modulated</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="fmod">f<sub>mod</sub> (GHz)</label>
+        <input id="fmod" type="range" min="0.1" max="2" step="0.01" value="1.30">
+        <output id="fmodOut">1.30 GHz</output>
+      </div>
+      <div class="control">
+        <label for="range">Range (m)</label>
+        <input id="range" type="range" min="0.5" max="20" step="0.5" value="3">
+        <output id="rangeOut">3.0 m</output>
+      </div>
+      <div class="control">
+        <label for="tem">TEM rejection (dB)</label>
+        <input id="tem" type="range" min="0" max="60" step="1" value="30">
+        <output id="temOut">30 dB</output>
+      </div>
+    </div>
+    <div class="toy-out" id="toyOut" aria-live="polite"></div>
+  </section>
+
+  <!-- 3 Detection A & B -->
+  <section class="section" id="detectors">
+    <h2>3. Detection chain A &amp; B (planned classes)</h2>
+    <p>
+      Hardware below describes <strong>classes</strong> of instruments Dan intends to explore —
+      not owned, working units. Treat every “detector” sentence as a shopping list + literature lineage.
+    </p>
+    <div class="two-col">
+      <div class="card">
+        <h4>Chain A · ~1296 MHz</h4>
+        <ul>
+          <li>Faraday-caged <strong>bifilar</strong> / sleeve-balun stub lineage near <strong>1.296 GHz</strong></li>
+          <li>TEM-null philosophy: reject ordinary transverse fields preferentially</li>
+          <li>Analyzer: <strong>TinySA Ultra</strong> (or similar portable SA)</li>
+          <li>Controls: single-filar / loop floors for residual TEM</li>
+        </ul>
+      </div>
+      <div class="card violet">
+        <h4>Chain B · 433 MHz</h4>
+        <ul>
+          <li>Monstein–Wesley-style <strong>sphere</strong> source/detector geometry at <strong>433.59 MHz</strong></li>
+          <li>Polarizer-rod arrays to test longitudinal vs transverse absorption</li>
+          <li>Same TinySA Ultra backend where practical</li>
+          <li>Distance / orientation sweeps as in the 2002 EPL geometry spirit</li>
+        </ul>
+      </div>
+    </div>
+    <p>
+      Both chains sit conceptually next to the Exodus chamber and cage. Cage on/off and vacuum on/off
+      are first-class experimental knobs — not afterthoughts.
+    </p>
+  </section>
+
+  <!-- 4 Broader RF -->
+  <section class="section" id="broadband">
+    <h2>4. Broader RF slice</h2>
+    <p>
+      A TinySA Ultra / similar SA covers a much wider band than the two intended TX tones.
+      Use the A/B antennas as <strong>opportunistic wideband probes</strong> while still highlighting
+      planned narrowband locks:
+    </p>
+    <ul>
+      <li><strong>Narrowband locks:</strong> 1.296 GHz (A), 433.59 MHz (B) — primary hypothesis windows.</li>
+      <li><strong>Harmonics &amp; sidebands:</strong> especially under deliberate modulation.</li>
+      <li><strong>Broadband plasma / breakdown noise:</strong> if vacuum or HV stress produces arcs or glow — log it; do not romanticize it as SLW.</li>
+      <li><strong>Spurious lab RF:</strong> ISM, ham, Wi-Fi, and chamber pumps can masquerade as “signal.”</li>
+    </ul>
+  </section>
+
+  <!-- 5 SW / NZ -->
+  <section class="section" id="sw-nz">
+    <h2>5. SW / static A / Nikolova–Zimmerman-style detectors</h2>
+    <p>
+      Beyond bifilar TEM-null SLW paths, the literature and correspondence tradition discuss detectors
+      more suited to <strong>SW</strong> or non-propagating vector-potential ideas:
+    </p>
+    <ul>
+      <li>
+        <strong>Nikolova–Zimmerman-style</strong> argon–mercury / neon <strong>plasma-tube</strong>
+        (fluorescent-tube lineage) detectors as a <em>future</em> method — cite the plasma-tube /
+        fluorescent detection papers carefully; they are not a substitute for a built A/B chain.
+      </li>
+      <li>
+        Contrast with <strong>Hively bifilar TEM-null SLW</strong> path: designed to favor longitudinal
+        electric coupling while rejecting TEM.
+      </li>
+      <li>
+        Educational Hively correspondence framing (contested): SLW may couple to matter with
+        Ohmic-like <span class="mono">σ E<sub>∥</sub><sup>2</sup></span> losses; SW (pure dynamical scalar,
+        longitudinal E → 0) is sometimes predicted as comparatively Ohmic-free.
+        Treat this as a hypothesis language, not textbook Maxwell.
+      </li>
+    </ul>
+  </section>
+
+  <!-- 6 Hively math -->
+  <section class="section" id="math-hively">
+    <h2>6. Math — Hively EED momentum / energy (educational)</h2>
+    <p class="illus">Illustrative structure from public Hively / EED educational materials — not a claim that these equations are experimentally confirmed in Titusville.</p>
+    <p>
+      A useful bookkeeping device in this extended-electrodynamics conversation is the
+      <strong>dynamical scalar</strong>
+    </p>
+    <div class="math">C  ≡  ∇·A  +  ∂<sub>t</sub> φ
+
+(with A the vector potential, φ the scalar potential;
+notation varies across authors — illustrative)</div>
+    <p>
+      In Lorenz gauge, classical Maxwell effectively sets <span class="mono">C = 0</span>.
+      Extended treatments that retain <span class="mono">C ≠ 0</span> discuss additional channels:
+    </p>
+    <ul>
+      <li><strong>SLW:</strong> propagating modes with a longitudinal electric field component E<sub>∥</sub>.</li>
+      <li><strong>SW:</strong> often framed as a pure-C / scalar channel with little classical E — and, in some correspondence,
+          little or no classical electromagnetic momentum (mark as <strong>hypothesis / contested</strong>).</li>
+    </ul>
+    <h3>Longitudinal drive &amp; gradient current (schematic)</h3>
+    <div class="math">E<sub>∥</sub>  ~  −∇φ  −  ∂<sub>t</sub>A<sub>∥</sub>   (longitudinal pieces)
+
+j<sub>grad</sub>  ~  σ E<sub>∥</sub>     (Ohmic-like response to longitudinal E)
+
+P<sub>Ohm, SLW</sub>  ~  σ |E<sub>∥</sub>|<sup>2</sup>     (loss channel discussed for SLW)
+
+SW (E→0, C≠0):   P<sub>Ohm</sub> ~ 0     in the “Ohmic-free” sketch — contested</div>
+    <h3>Energy / momentum bookkeeping contrast (qualitative)</h3>
+    <div class="math">Classical TEM (schematic):
+  u<sub>EM</sub> ~ (ε<sub>0</sub>/2)|E|<sup>2</sup> + (1/(2μ<sub>0</sub>))|B|<sup>2</sup>
+  S     ~ E × H                 (Poynting)
+
+SLW sketch:
+  carries longitudinal E → can source Ohmic σE<sub>∥</sub><sup>2</sup>
+  momentum/energy shared with matter more “electromagnetically familiar”
+
+SW sketch (hypothesis):
+  energy associated with C / potentials
+  classical EM momentum often argued small or absent
+  → any force bookkeeping must be stated carefully (contested)</div>
+    <p>
+      Do <strong>not</strong> invent numerical energy densities or peer-reviewed Hively thrust numbers here.
+      The point for Experiment E is operational: TEM-null antennas plus plasma-tube futures
+      ask whether any excess tracks SLW-like vs SW-like expectations under null vs modulated capacitor modes.
+    </p>
+  </section>
+
+  <!-- 7 Buhler math -->
+  <section class="section" id="math-buhler">
+    <h2>7. Math — Buhler 3rd-order QED (from public APEC / YouTube)</h2>
+    <p>
+      From public APEC writeups and YouTube talks (e.g. Tim Ventura’s
+      <a href="https://www.altpropulsion.com/exodus-propellantless-propulsion-physics/">Exodus Propellantless Propulsion Physics</a>
+      and the talk
+      <a href="https://www.youtube.com/watch?v=VuOx7n77G78">Exodus Propellantless Propulsion Physics | Charles Buhler</a>),
+      the educational structure is:
+    </p>
+    <ul>
+      <li><strong>2nd-order QED</strong> perturbation recovers classical <strong>Coulomb</strong> interaction.</li>
+      <li><strong>3rd-order</strong> involves many more diagrams — public talks cite on the order of
+          <strong>~12 terms</strong> (vs fewer at 2nd order; “12 vs 4” appears in talk framing).</li>
+      <li>Charge-asymmetric structures such as <span class="mono">Q³</span> and <span class="mono">Q<sub>1</sub>² Q<sub>2</sub></span> terms appear in the narrative.</li>
+      <li>Feynman-diagram language: virtual photons <strong>emitted but not re-absorbed</strong> → proposed
+          <strong>quantum recoil / momentum</strong> available to the charged system.</li>
+      <li>Casimir analogy is used carefully in talks: Exodus narrative emphasizes <em>adding</em> vacuum states,
+          not subtracting them as in Casimir plates.</li>
+      <li>A <strong>peer-reviewed formula paper is intended / unpublished</strong> as of those public talks —
+          do not invent equations that pretend to be that paper.</li>
+    </ul>
+    <div class="math">Qualitative ladder (public-talk level — not a derived paper):
+
+2nd order  →  Coulomb-like force between charges
+3rd order  →  additional charge-asymmetric terms (Q³, Q₁²Q₂, …)
+           →  diagrams with unpaired virtual-photon lines
+           →  proposed net translational force / vacuum momentum exchange
+
+<span class="note">No peer-reviewed closed-form thrust formula is reproduced here. Company/APEC claims of multi-lab verification should be read as claims — warm skepticism applies. Buhler emphasizes independence from NASA views.</span></div>
+    <h3>Patent vs talk gap</h3>
+    <p>
+      The patent path (WO2020159603 family and US grants/applications listed on
+      <a href="https://ept.space/patents/">ept.space/patents</a>) is largely
+      <strong>classical asymmetrical electrostatic pressure</strong> language.
+      Public talks add a separate <strong>3rd-order QED</strong> narrative.
+      Experiment E notes the gap; it does not paper over it.
+    </p>
+  </section>
+
+  <!-- 8 Theory match -->
+  <section class="section" id="match">
+    <h2>8. Theory matching — Buhler ↔ Hively (exploratory)</h2>
+    <div class="banner">
+      <strong>Do not claim equivalence.</strong> QED perturbation diagrams and extended Maxwell (EED/MCE)
+      may simply be different languages aimed at different observables. Warm skepticism is the house style.
+    </div>
+    <p>Clues worth staring at — without forcing a marriage:</p>
+    <ul>
+      <li>(a) EED’s separate <strong>SLW vs SW</strong> energy/momentum terms — SW often sketched with little classical momentum, like a “pure scalar” channel.</li>
+      <li>(b) Buhler’s <strong>3rd-order virtual-photon</strong> diagrams that appear to move momentum off the charged system / into vacuum bookkeeping.</li>
+    </ul>
+    <h3>Testable questions (for a careful lab day)</h3>
+    <ol>
+      <li>Does <strong>null-mode</strong> residual thrust (if any, under Exodus protocols) correlate with any longitudinal/scalar detector excess on A/B?</li>
+      <li>Does modulation at <strong>1.3 GHz / 433 MHz</strong> imprint on TEM-null channels above TEM-loop floors?</li>
+      <li>Do Faraday-cage and vacuum knobs affect thrust claims and RF excess differently?</li>
+      <li>If a future plasma-tube (NZ-style) channel fires without a bifilar excess, does that look more “SW-like” than “SLW-like” in the contested bookkeeping?</li>
+    </ol>
+  </section>
+
+  <!-- 9 Ask -->
+  <section class="section" id="ask">
+    <h2>9. Ask / open items</h2>
+    <p>
+      It may help to politely request Dr. Buhler’s
+      <strong>Deep Tech Week</strong> Friday <strong>11 Sep 2026</strong>
+      (“Heavy Industry in the High Frontier” / Hyperstition program context; Crystal City / Arlington area closing reception)
+      slides and Feynman diagrams — see the event listing at
+      <a href="https://www.deep-tech-week.com/washington-2026/events/economic-physics-of-the-orbital-economy">deep-tech-week.com … economic-physics-of-the-orbital-economy</a>.
+      Exodus also noted Deep Tech Days DC week Sep 7–12 on <a href="https://ept.space/">ept.space</a>.
+    </p>
+    <p>Alternatives already public:</p>
+    <ul>
+      <li>Tim Ventura / APEC YouTube — e.g. “Exodus Propellantless Propulsion Physics | Charles Buhler”</li>
+      <li><a href="https://www.altpropulsion.com/exodus-propellantless-propulsion-physics/">altpropulsion.com</a> writeups</li>
+      <li><a href="https://ept.space/">ept.space</a> / exoduspropulsion.space — media, patents, vacuum showcase</li>
+      <li>Contact listed on site: <span class="mono">info@ept.space</span> · Titusville, FL</li>
+    </ul>
+  </section>
+
+  <!-- 10 Library -->
+  <section class="section" id="library">
+    <h2>10. Library</h2>
+    <p>External references only. Cards are starting points — verify PDFs and legal texts yourself.</p>
+    <div class="library">
+      <article class="lib-card">
+        <div class="kind">Patent · detection lineage</div>
+        <h4>Hively US 9,306,527 (2016)</h4>
+        <p>Receiver / method claims in the longitudinal / scalar-wave detector conversation; foundational for bifilar TEM-null thinking.</p>
+        <a href="https://patents.google.com/patent/US9306527B1">patents.google.com · US9306527</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Paper · 433 MHz sphere</div>
+        <h4>Monstein &amp; Wesley 2002 EPL</h4>
+        <p>“Observation of scalar longitudinal electrodynamic waves,” EPL 59 (4) 514–520. Sphere antennas at 433.59 MHz; polarizer-rod test.</p>
+        <a href="https://www.jamespaulwesley.org/Document_Files/Observation_of_scalar_longitudinal_electroydnamic_waves.pdf">Author-hosted PDF</a>
+        · <a href="https://doi.org/10.1209/epl/i2002-00136-9">DOI</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Papers · plasma / fluorescent</div>
+        <h4>Nikolova–Zimmerman lineage (~2007 era)</h4>
+        <p>Plasma-tube / fluorescent detection discussions in the SLW literature — cite individual papers carefully; treat as future method, not Dan’s current kit.</p>
+        <a href="https://scholar.google.com/scholar?q=Nikolova+Zimmerman+longitudinal+electromagnetic">Scholar search</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">APEC writeup</div>
+        <h4>Exodus propulsion physics</h4>
+        <p>Tim Ventura / APEC page summarizing Buhler’s “Exodus and the Third Order” talk structure; company claims noted skeptically.</p>
+        <a href="https://www.altpropulsion.com/exodus-propellantless-propulsion-physics/">altpropulsion.com</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">YouTube</div>
+        <h4>Buhler APEC talk</h4>
+        <p>Public talk with 3rd-order diagram discussion; formulas paper described as forthcoming in talk framing.</p>
+        <a href="https://www.youtube.com/watch?v=VuOx7n77G78">youtube.com/watch?v=VuOx7n77G78</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Event · Sep 2026</div>
+        <h4>Deep Tech Week — High Frontier</h4>
+        <p>Fri 11 Sep 2026 context: “Heavy Industry in the High Frontier”; Crystal City / Arlington area program. Ask for slides.</p>
+        <a href="https://www.deep-tech-week.com/washington-2026/events/economic-physics-of-the-orbital-economy">Event page</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Patent · classical framing</div>
+        <h4>WO2020159603 family</h4>
+        <p>International / family language for asymmetrical electrostatic pressure propulsion — classical patent framing, not the QED talk.</p>
+        <a href="https://patents.google.com/patent/WO2020159603A1">patents.google.com · WO2020159603</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">US patent · granted</div>
+        <h4>US 11,511,891 B2</h4>
+        <p>Aurigema et al., Nov 29, 2022 — “System and Method for Generating Forces Using Asymmetrical Electrostatic Pressure.” Classical electrostatic-pressure framing.</p>
+        <a href="https://patents.google.com/patent/US11511891B2">US11511891B2</a>
+        · <a href="https://ept.space/patents/">ept.space/patents</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">US applications · same family</div>
+        <h4>US 2024/0011469 · 2023/0121805 · 2020/0255167</h4>
+        <p>Related published applications, same asymmetrical electrostatic pressure title family. Label: classical framing in the patent text.</p>
+        <a href="https://ept.space/patents/">Listed on ept.space/patents</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Company · Titusville</div>
+        <h4>ept.space</h4>
+        <p>Official site (also exoduspropulsion.space): T-Blade testing, vacuum electrostatic pressure, patents, media. Location: Titusville, FL. Contact: info@ept.space.</p>
+        <a href="https://ept.space/">ept.space</a>
+        · <a href="https://ept.space/media/">media</a>
+        · <a href="https://ept.space/showcase/#vacuum-testing">vacuum showcase</a>
+      </article>
+      <article class="lib-card">
+        <div class="kind">Chat notes · not peer review</div>
+        <h4>Shared Grok analysis</h4>
+        <p>Informal chat notes for brainstorming only — not a citation of record.</p>
+        <a href="https://grok.com/share/bGVnYWN5_166b732d-6ba0-42c2-ae3e-936308d5f0b7">grok.com/share/…</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 11 Pass/fail -->
+  <section class="section" id="controls">
+    <h2>11. Pass / fail &amp; controls</h2>
+    <ul class="checklist">
+      <li><strong>TEM floors:</strong> loop and single-filar antennas — establish residual TEM before celebrating TEM-null excess.</li>
+      <li><strong>Faraday cage:</strong> on / off around the capacitor (and document chamber wall effects).</li>
+      <li><strong>Vacuum:</strong> on / off — ion wind and Paschen curiosities are classic confounders.</li>
+      <li><strong>Supply:</strong> connected vs disconnected (<strong>null mode</strong>).</li>
+      <li><strong>Modulation:</strong> on/off at each band (1.296 GHz, 433.59 MHz).</li>
+      <li><strong>Geometry:</strong> distance and orientation sweeps; polarizer rods for B-chain longitudinality tests.</li>
+      <li><strong>Blind-ish logging:</strong> pre-register what counts as a “hit” (SNR, bandwidth, repeatability) before the visit if possible.</li>
+    </ul>
+    <p>
+      A “pass” for Experiment E would be a reproducible TEM-null excess that tracks capacitor state
+      better than TEM floors and better than lab RFI — still not automatic proof of SLW/SW physics.
+      A clean “fail” (no excess) is an equally respectable educational outcome.
+    </p>
+  </section>
+
+  <!-- 12 Safety -->
+  <section class="section" id="safety">
+    <h2>12. Safety</h2>
+    <div class="banner">
+      <strong>Exodus lab rules dominate.</strong> Dan is a guest with detectors.
+      High-voltage capacitors, vacuum systems, and RF exposure are not casual DIY hazards.
+      Stay outside keep-out zones; follow host PPE and lockout procedures; do not touch chamber HV
+      or override interlocks for a prettier spectrum plot.
+    </div>
+    <ul>
+      <li>HV capacitors store lethal energy even after supply disconnect — verify safe discharge protocols.</li>
+      <li>Vacuum viewports and pumps: eye/ear protection and training as required by the host.</li>
+      <li>RF: keep transmit power (if any guest gear) within agreed limits; respect SAR/exposure common sense near antennas.</li>
+      <li>No unsupervised modulation of host hardware — ask, document, stop when unsure.</li>
+    </ul>
+  </section>
+
+  <footer class="footer">
+    <p>
+      Experiment E · Independent educational HTML for Daniel Britton · Working title only ·
+      Not NASA-endorsed · Not a claim that A/B detectors work · Illustrative math marked as such ·
+      No links to any SLW Hub domain.
+    </p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  const mode = document.getElementById('mode');
+  const fmod = document.getElementById('fmod');
+  const range = document.getElementById('range');
+  const tem = document.getElementById('tem');
+  const fmodOut = document.getElementById('fmodOut');
+  const rangeOut = document.getElementById('rangeOut');
+  const temOut = document.getElementById('temOut');
+  const toyOut = document.getElementById('toyOut');
+
+  function nearestBand(fGHz) {
+    const a = Math.abs(fGHz - 1.296);
+    const b = Math.abs(fGHz - 0.43359);
+    if (a < b) return { name: 'A · bifilar lock ≈1.296 GHz', d: a };
+    return { name: 'B · sphere lock ≈433.59 MHz', d: b };
+  }
+
+  function update() {
+    const f = parseFloat(fmod.value);
+    const r = parseFloat(range.value);
+    const rej = parseFloat(tem.value);
+    fmodOut.textContent = f.toFixed(2) + ' GHz';
+    rangeOut.textContent = r.toFixed(1) + ' m';
+    temOut.textContent = rej.toFixed(0) + ' dB';
+
+    const band = nearestBand(f);
+    const modeNull = mode.value === 'null';
+    const path = Math.max(0, 20 * Math.log10(1 / Math.max(r, 0.5))); // toy free-space-ish
+    const drive = modeNull ? -40 : -8;
+    const detune = -80 * Math.min(band.d, 0.5);
+    const illus = drive + path + detune; // dB toy score
+    const afterRej = illus - (60 - rej) * 0.15;
+
+    let story;
+    if (modeNull) {
+      story = 'Null mode: no intentional RF drive. Any detector excess would be surprising — treat lab RFI and supply-disconnect transients as first suspects.';
+    } else if (band.d < 0.05) {
+      story = 'Modulated near a planned lock (' + band.name + '). Forced narrowband opportunity — still require TEM-floor controls.';
+    } else {
+      story = 'Modulated off the A/B locks (' + band.name + ' is closest). Wideband SA may still see harmonics/sidebands; narrowband hypothesis is weaker.';
+    }
+
+    toyOut.innerHTML =
+      '<strong>Illustrative readout (not physics):</strong> ' + story +
+      ' Toy “coupling score” ≈ <span class="mono">' + afterRej.toFixed(1) + ' dB</span> ' +
+      'at ' + r.toFixed(1) + ' m with TEM-rejection slider ' + rej + ' dB. ' +
+      'Higher rejection does not invent longitudinal signal — it only reminds you what the antenna class is for.';
+  }
+
+  [mode, fmod, range, tem].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+</script>
+</body>
+</html>
