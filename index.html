@@ -317,6 +317,7 @@ svg.toy-plot, svg.toy-cartoon {
       <a href="#hypothesis">Hypothesis</a>
       <a href="#modes">Modes</a>
       <a href="#detectors">A/B</a>
+      <a href="#listen-check">Listen checklist</a>
       <a href="#math-hively">Hively</a>
       <a href="#math-buhler">Buhler</a>
       <a href="#match">Match</a>
@@ -519,6 +520,8 @@ svg.toy-plot, svg.toy-cartoon {
           <li>Monstein–Wesley-style <strong>sphere</strong> source/detector geometry at <strong>433.59 MHz</strong></li>
           <li>Same TinySA Ultra backend where practical</li>
           <li>Distance / orientation sweeps as in the 2002 <em>Europhysics Letters</em> (EPL) geometry spirit</li>
+          <li>For a Titusville Exodus <strong>listen</strong>: prefer the <strong>sphere without polarizing rods</strong>
+              (see <a href="#listen-check">§5 checklist</a>); rods are a separate Exp&nbsp;B path.</li>
         </ul>
       </div>
     </div>
@@ -544,9 +547,76 @@ svg.toy-plot, svg.toy-cartoon {
     </ul>
   </section>
 
-  <!-- 5 SLW vs SW -->
+  <!-- 5 Titusville listen checklist -->
+  <section class="section" id="listen-check">
+    <h2>5. Things to consider and check — Titusville “listen to the capacitors”</h2>
+    <p>
+      If Dan ever runs a lab <strong>RF / field listen</strong> next to Exodus hardware in Titusville,
+      treat the items below as a pre-flight checklist — not a claim that a tunneling-launched
+      Scalar Longitudinal Wave (SLW) will be heard. Warm skepticism: napkin math says a
+      <strong>post-isolation tunneling → SLW</strong> chain is typically
+      <strong>far below</strong> TinySA Ultra detection at Experiment&nbsp;A/B distances.
+      A null is compatible with “too weak,” not with “thrust is false.”
+    </p>
+
+    <div class="card" style="margin:1rem 0">
+      <h4>Lab reality at Exodus (plan around this)</h4>
+      <ul>
+        <li>Capacitors under test are <strong>always in a Faraday cage</strong>.</li>
+        <li>At <strong>higher voltage</strong> they are <strong>usually also in a vacuum chamber</strong>.</li>
+        <li>Any listen must account for <strong>cage attenuation</strong>, chamber wall modes,
+            feedthrough / viewport leakage, pump and HV-supply RF hash, and whether the probe is
+            <em>inside</em> the cage, outside the cage, or outside the chamber.</li>
+      </ul>
+    </div>
+
+    <div class="card violet" style="margin:1rem 0">
+      <h4>Detectors for this listen (no polarizing rods)</h4>
+      <ul>
+        <li><strong>Experiment A</strong> (~¾″ aluminum sphere + SMA) and/or
+            <strong>Experiment B</strong> (2.5″ sphere + SMA) as receive probes —
+            <strong>without</strong> Exp&nbsp;B polarizing rods for this Exodus listen.</li>
+        <li>Spheres alone are crude <strong>E-field / RF probes</strong>, not an SLW-identifying polarimeter.
+            A TinySA spike ≠ “proven SLW”; at best “RF or pickup coincident with the DUT.”</li>
+        <li>Do <strong>not</strong> stay parked only on <strong>433&nbsp;MHz</strong> or <strong>~1.3&nbsp;GHz</strong>.
+            Tunneling / dielectric relaxation / charge rearrange are not coherent ham-band beacons.
+            Use <strong>wide TinySA Ultra sweeps</strong> (span + averaging); treat 433 / 1296 as optional kit check bands.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin:1rem 0" id="listen-vna">
+      <h4>NanoRFE VNA6000-A — things to check before claiming a listen</h4>
+      <p class="illus" style="margin-top:0">On hand · 50&nbsp;kHz–6&nbsp;GHz 2-port ·
+        <a href="https://nanorfe.com/vna6000.html">nanorfe.com/vna6000</a> ·
+        hub <a href="https://9wzg44nz44-glitch.github.io/kit.html#vna6000">kit.html#vna6000</a>.
+        TinySA remains the spectrum analyzer / generator.</p>
+      <ul>
+        <li><strong>S<sub>11</sub></strong> of each sphere + coax + any feedthrough adapter (is the probe resonant where you think?).</li>
+        <li><strong>S<sub>21</sub></strong> cage/chamber path checks where practical (how much does the Faraday cage / vacuum wall attenuate a known inject?).</li>
+        <li><strong>TDR</strong> on long runs and vacuum feedthroughs (bad connectors masquerade as “signals”).</li>
+        <li>Document cable lengths, grounds, and whether the VNA/TinySA share the chamber ground — common-mode loops create false peaks.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin:1rem 0">
+      <h4>Observation windows &amp; amplitude honesty</h4>
+      <ul>
+        <li>Record during <strong>charge</strong>, <strong>hold (supply on)</strong>, <strong>disconnect edge</strong>, and
+            <strong>isolated hold (supply removed)</strong> — largest dQ/dt is usually the disconnect/charge edge, not quiet isolation.</li>
+        <li>Hypothesized <strong>tunneling-launched SLW after supply removal</strong>: expected coupled power at A/B is typically
+            <strong>not in the TinySA ballpark</strong> (see Gyre napkin math /
+            <a href="https://9wzg44nz44-glitch.github.io/Gyre-Buhler-Hively-QED3-EED-Ledger/#napkin-math">Gyre ledger #napkin-math</a>).
+            Widening bandwidth is <strong>necessary, not sufficient</strong>.</li>
+        <li>Log vacuum on/off, cage integrity, HV setpoint, and any glow/arc — broadband plasma noise is a confounder, not SLW proof.</li>
+        <li>Pass/fail for a first listen: reproducible excess vs baselines with DUT HV off, probe capped, and (if allowed) empty-cage inject — not a single pretty waterfall.</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- 6 SLW vs SW -->
   <section class="section" id="sw-slw">
-    <h2>5. Scalar Longitudinal Wave (SLW) vs Scalar Wave (SW) framing</h2>
+    <h2>6. Scalar Longitudinal Wave (SLW) vs Scalar Wave (SW) framing</h2>
     <p>
       Experiment E’s planned kit is the <strong>A/B Pelican pair</strong> (bifilar / sphere).
       Hively educational correspondence still distinguishes two bookkeeping languages:
@@ -567,7 +637,7 @@ svg.toy-plot, svg.toy-cartoon {
 
   <!-- 6 Hively math -->
   <section class="section" id="math-hively">
-    <h2>6. Math — Hively Extended Electrodynamics (EED) momentum / energy (educational)</h2>
+    <h2>7. Math — Hively Extended Electrodynamics (EED) momentum / energy (educational)</h2>
     <p class="illus">Illustrative structure from public Hively / EED educational materials — not a claim that these equations are experimentally confirmed in Titusville.</p>
     <p>
       A useful bookkeeping device in this extended-electrodynamics conversation is the
@@ -616,7 +686,7 @@ SW sketch (hypothesis):
 
   <!-- 7 Buhler math -->
   <section class="section" id="math-buhler">
-    <h2>7. Math — Buhler 3rd-order Quantum Electrodynamics (QED) (from public Alternative Propulsion Engineering Conference (APEC) / YouTube)</h2>
+    <h2>8. Math — Buhler 3rd-order Quantum Electrodynamics (QED) (from public Alternative Propulsion Engineering Conference (APEC) / YouTube)</h2>
     <p>
       From public APEC writeups and YouTube talks (e.g. Tim Ventura’s
       <a href="https://www.altpropulsion.com/exodus-propellantless-propulsion-physics/">Exodus Propellantless Propulsion Physics</a>
@@ -656,7 +726,7 @@ SW sketch (hypothesis):
 
   <!-- 8 Theory match -->
   <section class="section" id="match">
-    <h2>8. Theory matching — Buhler ↔ Hively (exploratory)</h2>
+    <h2>9. Theory matching — Buhler ↔ Hively (exploratory)</h2>
     <div class="banner">
       <strong>Do not claim equivalence.</strong> QED perturbation diagrams and extended Maxwell (EED/MCE)
       may simply be different languages aimed at different observables. Warm skepticism is the house style.
@@ -677,7 +747,7 @@ SW sketch (hypothesis):
 
   <!-- 9 Ask -->
   <section class="section" id="ask">
-    <h2>9. Ask / open items</h2>
+    <h2>10. Ask / open items</h2>
     <p>
       It may help to politely request Dr. Buhler’s
       <strong>Deep Tech Week</strong> Friday <strong>11 Sep 2026</strong>
@@ -697,7 +767,7 @@ SW sketch (hypothesis):
 
   <!-- 10 Library -->
   <section class="section" id="library">
-    <h2>10. Library</h2>
+    <h2>11. Library</h2>
     <p>External references only. Cards are starting points — verify PDFs and legal texts yourself.</p>
     <div class="library">
       <article class="lib-card">
@@ -773,7 +843,7 @@ SW sketch (hypothesis):
 
   <!-- 11 Pass/fail -->
   <section class="section" id="controls">
-    <h2>11. Pass / fail &amp; controls</h2>
+    <h2>12. Pass / fail &amp; controls</h2>
     <ul class="checklist">
       <li><strong>TEM floors:</strong> loop and single-filar antennas — establish residual TEM before celebrating TEM-null excess.</li>
       <li><strong>Faraday cage:</strong> on / off around the capacitor (and document chamber wall effects).</li>
@@ -792,7 +862,7 @@ SW sketch (hypothesis):
 
   <!-- 12 Safety -->
   <section class="section" id="safety">
-    <h2>12. Safety</h2>
+    <h2>13. Safety</h2>
     <div class="banner">
       <strong>Exodus lab rules dominate.</strong> Dan is a guest with detectors.
       High-voltage capacitors, vacuum systems, and RF exposure are not casual do-it-yourself (DIY) hazards.
