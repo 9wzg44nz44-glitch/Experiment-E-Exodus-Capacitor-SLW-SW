@@ -611,6 +611,95 @@ svg.toy-plot, svg.toy-cartoon {
         <li>Pass/fail for a first listen: reproducible excess vs baselines with DUT HV off, probe capped, and (if allowed) empty-cage inject — not a single pretty waterfall.</li>
       </ul>
     </div>
+
+    <div class="card" style="margin:1rem 0" id="listen-steps">
+      <h4>Step-by-step instruments · VNA6000 path check + TinySA Ultra listen</h4>
+      <p class="illus" style="margin-top:0">
+        <strong>Role split (important):</strong> the NanoRFE <strong>VNA6000</strong> does <em>not</em> passively capture
+        Scalar Longitudinal Wave (SLW) / Scalar Wave (SW) emissions. It measures
+        S<sub>11</sub>/S<sub>21</sub> to <em>its own</em> stimulus
+        (<a href="https://nanorfe.com/downloads/vna6000_manual.pdf">VNA6000 manual</a>).
+        Use the <strong>TinySA Ultra</strong> as the spectrum analyzer to listen.
+        Use the VNA to prove the sphere/coax/cage path is sane before you trust a waterfall.
+        DUT stays in the Faraday cage; high voltage usually also in vacuum — never put VNA ports on HV electrodes.
+      </p>
+
+      <h4 style="margin-top:1rem">A. VNA6000 — on-device button path (probe / cage path)</h4>
+      <ol>
+        <li>Attach SMA connector savers. Power on. Open menu (tap empty screen or <strong>ENTER</strong>).</li>
+        <li><strong>STIMULUS → START</strong> = 50&nbsp;kHz (or 100&nbsp;kHz). <strong>STIMULUS → STOP</strong> = 3&nbsp;GHz or 6&nbsp;GHz for a wide check
+            (re-calibrate after any range change).</li>
+        <li><strong>Sphere S<sub>11</sub> (is the probe alive?):</strong>
+          <ol>
+            <li><strong>CAL → RESET</strong> then <strong>CAL → CALIBRATE</strong>.</li>
+            <li>Put coax on Port&nbsp;1. At the <em>sphere end</em> of that coax: <strong>OPEN</strong> → menu <strong>OPEN</strong>;
+                <strong>SHORT</strong> → <strong>SHORT</strong>; <strong>LOAD</strong> → <strong>LOAD</strong>. Then <strong>DONE</strong> → <strong>SAVE n</strong>.</li>
+            <li>Connect the sphere. <strong>DISPLAY → TRACE → TRACE 0</strong> active;
+                <strong>DISPLAY → CHANNEL → CH0 REFLECT</strong>;
+                <strong>DISPLAY → FORMAT → LOGMAG</strong> (and/or <strong>SMITH</strong>).</li>
+            <li>Expect a structured S<sub>11</sub> (not a dead flat −∞). Save a screenshot / export via PC if using NanoVNA-QT.</li>
+          </ol>
+        </li>
+        <li><strong>Cage / chamber attenuation S<sub>21</sub> (how deaf is “outside the cage”?):</strong>
+          <ol>
+            <li>Place a small inject antenna or open SMA stub <em>inside</em> the cage (cold, HV off) if staff allow;
+                sphere (or second antenna) outside at the listen position.</li>
+            <li>Wide SOLT: Port&nbsp;1 cable to inject, Port&nbsp;2 cable to sphere —
+                <strong>CAL → RESET → CALIBRATE</strong>, OPEN/SHORT/LOAD at Port&nbsp;1 cable end, <strong>THRU</strong> between cable ends, <strong>DONE → SAVE</strong>.</li>
+            <li><strong>DISPLAY → CHANNEL → CH1 THROUGH</strong>; <strong>FORMAT → LOGMAG</strong>.</li>
+            <li>Record S<sub>21</sub>(f) with cage closed vs cracked open (if safe). That curve is your “spreading + cage wall” budget in dB.</li>
+          </ol>
+        </li>
+        <li><strong>TDR (cables / feedthroughs):</strong>
+            set start ~50&nbsp;kHz, stop high enough for resolution;
+            <strong>DISPLAY → TRANSFORM → TRANSFORM ON</strong>; low-pass / step as in the manual;
+            set <strong>VELOCITY FACTOR</strong> for your coax. Hunt bad connectors before blaming SLW.</li>
+        <li>Optional PC: NanoVNA-QT / VNA View → Device → Sweep parameters (start/stop, points, averaging) → Calibration pane SOL/SOLT → Apply → export.</li>
+      </ol>
+
+      <h4 style="margin-top:1rem">B. TinySA Ultra — wideband emission listen (the actual “capture”)</h4>
+      <ol>
+        <li>Sphere → coax → TinySA RF in. Start with attenuator auto; keep peaks ≪ 0&nbsp;dBm (prefer &lt; −25&nbsp;dBm at the connector).</li>
+        <li>Enable Ultra mode if listening above ~800&nbsp;MHz (per TinySA Ultra docs; unlock as required on your unit).</li>
+        <li>Do <strong>not</strong> stay only on 433&nbsp;MHz / 1.3&nbsp;GHz. Example campaign:
+            (i) 0.1–200&nbsp;MHz, (ii) 200–800&nbsp;MHz, (iii) 0.8–3&nbsp;GHz, (iv) optional 3–6&nbsp;GHz Ultra.
+            Use narrower RBW + averaging when hunting weak lines; wider RBW for survey speed.</li>
+        <li>For weakest floors: LNA on, RBW down (e.g. toward 200&nbsp;Hz–few kHz) — TinySA Ultra can approach roughly
+            <strong>−145&nbsp;dBm</strong> discernible at 30&nbsp;MHz / 200&nbsp;Hz RBW with LNA (spec sheet order-of-magnitude;
+            <a href="https://tinysa.org/wiki/pmwiki.php?n=TinySA4.Specification">tinysa.org Ultra specs</a>).
+            Wide spans raise the effective floor; Ultra mode loses ~10&nbsp;dB above ~2.5&nbsp;GHz and more above ~5.3&nbsp;GHz.</li>
+        <li>Baselines (same sphere position): HV off; DUT cold; probe capped 50&nbsp;Ω; if allowed, empty-cage. Then charge / hold / disconnect / isolated-hold.</li>
+        <li>Save waterfalls + note vacuum on/off, cage closed, distance, and any glow/arc.</li>
+      </ol>
+
+      <h4 style="margin-top:1rem">C. Where to put the sphere(s) — near field vs far field + 1/r²</h4>
+      <p>
+        Let <span class="mono">D</span> be a characteristic size of the cage/DUT (often ~0.1–0.5&nbsp;m).
+        Wavelength <span class="mono">λ = c/f</span>. Rough radiated far-field rule of thumb:
+        <span class="mono">r ≳ 2 D² / λ</span>. Reactive near-field scale: <span class="mono">r ≲ λ / (2π)</span>.
+        In the radiated far field, power density for a fixed radiated power falls ~<strong>1/r²</strong>
+        (−6&nbsp;dB each time you double range). Inside/near the cage, decay can be steeper or messy (evanescent / multipath).
+      </p>
+      <ul>
+        <li><strong>Near-field / close listen (outside the closed cage wall):</strong> start about
+            <strong>5–20&nbsp;cm</strong> from the cage surface (or the nearest allowed point on the vacuum vessel).
+            Goal: maximize weak coupled E before 1/r² kills you. Watch common-mode / ground loops.</li>
+        <li><strong>Transition / mid:</strong> about <strong>0.5–1.5&nbsp;m</strong> — compare level vs the close station;
+            if a real radiated line exists, expect roughly order-of −6 to −20&nbsp;dB depending on exact ranges and pattern.</li>
+        <li><strong>Far-field survey:</strong> about <strong>2–3&nbsp;m</strong> (and farther if the room allows), especially below a few hundred MHz where
+            <span class="mono">λ/(2π)</span> is large. Use this to test “lab EMI vs DUT.”</li>
+        <li><strong>Two-sphere idea:</strong> one close (5–20&nbsp;cm), one far (2–3&nbsp;m), same TinySA via switch or two captures.
+            A true free-space-ish radiator should drop ~1/r² between stations; a local pickup / supply hash often will not.</li>
+        <li><strong>Ballpark sensitivity honesty:</strong> even at −120&nbsp;dBm on TinySA, converting to field strength needs antenna factor;
+            a tunneling-level hypothesized SLW after isolation is still likely below this kit at Titusville distances.
+            Use the VNA S<sub>21</sub> cage curve + 1/r² to decide whether a claimed line is physically plausible.</li>
+      </ul>
+      <p class="illus">
+        Example: if S<sub>21</sub> cage path is already −40&nbsp;dB and you move from 0.15&nbsp;m to 1.5&nbsp;m (−20&nbsp;dB from 1/r² alone),
+        you need ~60&nbsp;dB more source strength at the DUT to hold the same TinySA reading — plan expectations accordingly.
+      </p>
+    </div>
+
   </section>
 
 
