@@ -584,7 +584,30 @@ svg.toy-plot, svg.toy-cartoon {
       </ul>
     </div>
 
-    <div class="card" style="margin:1rem 0" id="listen-vna">
+    
+    <div class="card" style="margin:1rem 0" id="b-null-tekbox">
+      <h4>Tekbox H-probes · B-field null (Hively — required for SLW/SW vs TEM)</h4>
+      <p>
+        On hand (arrived 2026-09-19): <strong>Tekbox TBPS01</strong> set — <strong>H20 / H10 / H5</strong> (magnetic) and <strong>E5</strong> (electric),
+        with certificate/plots. Hub detail: <a href="https://9wzg44nz44-glitch.github.io/kit.html#tekbox">kit.html#tekbox</a>.
+        Manual: <a href="https://www.tekbox.com/product/TBPS01_TBWA2_Manual.pdf">TBPS01 PDF</a>.
+      </p>
+      <p>
+        Dr.&nbsp;Hively: place a <strong>magnetic-field probe near the receiver</strong> whenever measuring for SLW or SW
+        (Exp&nbsp;A/B spheres, Exodus listen, etc.). His IARD_2020 talk and earlier work (including 2016 patent-era setups)
+        note prior experiments that <strong>failed to measure a B-field</strong> in configurations he interpreted as non-TEM —
+        that absence is part of how one argues SLW/SW <em>versus</em> TEM. <strong>B-field knowledge is necessary</strong>
+        before saying “we detected an SLW or SW rather than a TEM wave.”
+      </p>
+      <ul>
+        <li>Candidate on sphere TinySA → immediately scan with <strong>H20</strong> (then H10/H5) at the same band next to the RX sphere; try loop orientations.</li>
+        <li><strong>Sphere hit + H at noise</strong> → consistent with weak-B / non-TEM hypothesis (still not a proof).</li>
+        <li><strong>Sphere hit + clear H line</strong> → TEM or mixed — do not claim pure SLW/SW.</li>
+        <li>Use <strong>E5</strong> only as E-field corroboration; it does not replace the H-null.</li>
+        <li>Inside/near Faraday cage or vacuum vessel: log probe position relative to cage wall; cage currents can fake H pickup.</li>
+      </ul>
+    </div>
+<div class="card" style="margin:1rem 0" id="listen-vna">
       <h4>NanoRFE VNA6000-A — things to check before claiming a listen</h4>
       <p class="illus" style="margin-top:0">On hand · 50&nbsp;kHz–6&nbsp;GHz 2-port ·
         <a href="https://nanorfe.com/vna6000.html">nanorfe.com/vna6000</a> ·
